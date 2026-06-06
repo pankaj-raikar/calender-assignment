@@ -1,10 +1,11 @@
 import { Info } from "lucide-react"
 import OrderRow from "./OrderRow"
-import { sampleOrders } from "../data/orders";
 import { formatDuration } from "../utils/date";
-
+import { useOrderStore } from "../store/ordersStore";
 
 const OrderListPanel = () => {
+
+    const orders = useOrderStore((state) => state.orders);
     return (
         <div className="h-full">
             <div className="grid h-16 grid-cols-4 items-center border-b border-slate-200 px-8 text-lg font-semibold text-slate-950">
@@ -19,7 +20,7 @@ const OrderListPanel = () => {
             </div>
 
             <div>
-                {sampleOrders.map((order, index) => (
+                {orders.map((order, index) => (
                     <OrderRow
                         key={order.id}
                         index={index + 1}

@@ -1,6 +1,6 @@
 import CalendarDayCell from "./CalendarDayCell";
-import { sampleOrders } from "../data/orders";
 import { isDateInRange } from "../utils/date";
+import { useOrderStore } from "../store/ordersStore";
 const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 const days = [
     { day: 27, isCurrentMonth: false },
@@ -40,9 +40,11 @@ const days = [
     { day: 29 },
     { day: 30 },
 ];
+
+
 const CalendarGrid = () => {
 
-
+    const orders = useOrderStore((state) => state.orders);
     return (
         <div>
             <div className="grid grid-cols-7 border-b border-slate-200 bg-slate-50">
@@ -59,7 +61,7 @@ const CalendarGrid = () => {
                         ? `2025-07-${String(date.day).padStart(2, "0")}`
                         : `2025-08-${String(date.day).padStart(2, "0")}`;
 
-                    const ordersForDay = sampleOrders.filter((order) =>
+                    const ordersForDay = orders.filter((order) =>
                         isDateInRange(dateString, order.startDate, order.endDate)
                     );
                     return (

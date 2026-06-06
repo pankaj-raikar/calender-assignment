@@ -1,7 +1,7 @@
 type OrderTagProps = {
     orderNumber: string;
     colorCode: string;
-    variant?: "filled" | "outlined" | "green";
+    variant?: "inProgress" | "completed" | "planned" | "cancelled" | "approved";
 };
 
 
@@ -10,13 +10,16 @@ type OrderTagProps = {
 const OrderTag = ({
     orderNumber,
     colorCode,
-    variant = "filled",
+    variant = "inProgress",
 }: OrderTagProps) => {
     const styles = {
-        filled: "bg-teal-600 text-white border-teal-600",
-        outlined: "bg-white text-yellow-500 border-yellow-400",
-        green: "bg-green-500 text-white border-green-500",
+        inProgress: "border-teal-600 bg-teal-600 text-white",
+        completed: "border-green-500 bg-green-500 text-white",
+        planned: "border-yellow-400 bg-white text-yellow-500",
+        cancelled: "border-slate-400 bg-slate-100 text-slate-500",
+        approved: "border-green-600 bg-green-600 text-white",
     };
+
 
     return (
         <div

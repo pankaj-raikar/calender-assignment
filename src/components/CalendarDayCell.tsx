@@ -7,6 +7,14 @@ type CalendarDayCellProps = {
     orders?: ProductionOrder[];
 }
 
+function getOrderTagVariant(status: ProductionOrder["status"]) {
+    if (status === "Completed") return "completed";
+    if (status === "Planned" || status === "Pending") return "planned";
+    if (status === "Cancelled") return "cancelled";
+    if (status === "Approved") return "approved";
+
+    return "inProgress";
+}
 
 const CalendarDayCell = ({
     day,
@@ -31,7 +39,7 @@ const CalendarDayCell = ({
                         key={order.id}
                         orderNumber={order.label}
                         colorCode={order.colorCode}
-                        variant={order.status === "Completed" ? "green" : "filled"}
+                        variant={getOrderTagVariant(order.status)}
                     />
                 ))}
             </div>
