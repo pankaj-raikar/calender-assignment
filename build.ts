@@ -2,7 +2,7 @@ import tailwind from "bun-plugin-tailwind";
 import { rm } from "node:fs/promises";
 import path from "node:path";
 
-const outdir = path.join(process.cwd(), "dist");
+const outdir = path.join(process.cwd(), "public");
 await rm(outdir, { recursive: true, force: true });
 
 const entrypoints = [...new Bun.Glob("src/**/*.html").scanSync()];
@@ -20,5 +20,7 @@ const result = await Bun.build({
 });
 
 for (const output of result.outputs) {
-  console.log(` ${path.relative(process.cwd(), output.path)}  ${(output.size / 1024).toFixed(1)} KB`);
+  console.log(
+    ` ${path.relative(process.cwd(), output.path)}  ${(output.size / 1024).toFixed(1)} KB`,
+  );
 }
