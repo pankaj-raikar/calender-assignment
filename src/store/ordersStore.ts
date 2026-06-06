@@ -8,8 +8,19 @@ import { getDurationInDays, rangesOverlap } from "../utils/date";
 
 const storageKey = "production-calendar-orders";
 
+const DATA_VERSION = "v2"; // bump this whenever sampleOrders changes
+const versionKey = "production-calendar-version";
+
 function getInitialOrders() {
   if (typeof localStorage === "undefined") {
+    return sampleOrders;
+  }
+
+  // If version mismatch, wipe stale cache and re-seed from sampleOrders
+  const savedVersion = localStorage.getItem(versionKey);
+  if (savedVersion !== DATA_VERSION) {
+    localStorage.removeItem(storageKey);
+    localStorage.setItem(versionKey, DATA_VERSION);
     return sampleOrders;
   }
 
@@ -21,6 +32,7 @@ function getInitialOrders() {
 
   return JSON.parse(savedOrders) as ProductionOrder[];
 }
+
 
 type CalendarView = "Monthly" | "Weekly";
 function formatMonthDate(date: Date) {
@@ -52,6 +64,8 @@ type OrdersStore = {
   draggedOrderId: string | null;
   setDraggedOrderId: (orderId: string | null) => void;
   moveOrder: (orderId: string, newStartDate: string) => void;
+  deleteOrder: (orderId: string) => void;
+  updateOrder: (orderId: string, patch: Partial<ProductionOrder>) => void;
   dragError: string;
   clearDragError: () => void;
   pastOrders: ProductionOrder[][];
@@ -103,7 +117,7 @@ export const useOrderStore = create<OrdersStore>((set) => ({
         toastMessage: "Order created.",
       };
     }),
-  currentMonth: "2025-08",
+  currentMonth: formatMonthDate(new Date()),
 
   setCurrentMonth: (month) => set({ currentMonth: month }),
 
@@ -180,6 +194,32 @@ export const useOrderStore = create<OrdersStore>((set) => ({
         dragError: "",
         pastOrders: [...state.pastOrders, state.orders],
         toastMessage: "Order moved.",
+      };
+    }),
+  deleteOrder: (orderId) =>
+    set((state) => {
+      const nextOrders = state.orders.filter((o) => o.id !== orderId);
+      if (typeof localStorage !== "undefined") {
+        localStorage.setItem(storageKey, JSON.stringify(nextOrders));
+      }
+      return {
+        orders: nextOrders,
+        pastOrders: [...state.pastOrders, state.orders],
+        toastMessage: "Order deleted.",
+      };
+    }),
+  updateOrder: (orderId, patch) =>
+    set((state) => {
+      const nextOrders = state.orders.map((o) =>
+        o.id === orderId ? { ...o, ...patch } : o
+      );
+      if (typeof localStorage !== "undefined") {
+        localStorage.setItem(storageKey, JSON.stringify(nextOrders));
+      }
+      return {
+        orders: nextOrders,
+        pastOrders: [...state.pastOrders, state.orders],
+        toastMessage: "Order updated.",
       };
     }),
   dragError: "",

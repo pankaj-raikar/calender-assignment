@@ -1,3 +1,4 @@
+import { Pencil } from "lucide-react";
 import StatusBadge from "./StatusBadge";
 
 type OrderRowProps = {
@@ -9,6 +10,7 @@ type OrderRowProps = {
     orderId: string;
     isSelected?: boolean;
     onClick?: () => void;
+    onEdit?: () => void;
 };
 
 
@@ -20,13 +22,14 @@ const OrderRow = ({
     progress,
     orderId,
     isSelected,
-    onClick
+    onClick,
+    onEdit,
 }: OrderRowProps) => {
     const ringColor =
         progress === 100 ? "border-green-500" : "border-slate-200";
 
     return (
-        <div onClick={onClick} className={`grid h-16 cursor-pointer grid-cols-[32px_minmax(72px,1fr)_minmax(72px,96px)_52px_22px_48px] items-center gap-1 rounded-lg border bg-white px-3 text-sm shadow-sm md:grid-cols-4 md:gap-0 md:rounded-none md:border-x-0 md:border-t-0 md:px-8 md:text-base md:shadow-none ${isSelected ? "border-indigo-300 bg-indigo-50" : "border-slate-200 md:border-slate-100"
+        <div onClick={onClick} className={`group relative grid h-16 cursor-pointer grid-cols-[32px_minmax(72px,1fr)_minmax(72px,96px)_52px_22px_48px] items-center gap-1 rounded-lg border bg-white px-3 text-sm shadow-sm md:grid-cols-4 md:gap-0 md:rounded-none md:border-x-0 md:border-t-0 md:px-8 md:text-base md:shadow-none ${isSelected ? "border-indigo-300 bg-indigo-50" : "border-slate-200 md:border-slate-100"
             }`}>
             <div className="contents md:flex md:items-center md:gap-5">
                 <span className="font-medium text-slate-500 md:text-indigo-700">#{index}</span>
@@ -43,8 +46,20 @@ const OrderRow = ({
                 <span className={`block h-5 w-5 shrink-0 justify-self-center rounded-full border-4 md:h-7 md:w-7 md:justify-self-auto ${ringColor}`} />
                 <span className="whitespace-nowrap text-right tabular-nums text-slate-500 md:text-inherit">{progress}%</span>
             </div>
+
+            {/* Edit button — visible on hover */}
+            {onEdit && (
+                <button
+                    aria-label={`Edit order ${code}`}
+                    onClick={(e) => { e.stopPropagation(); onEdit(); }}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 rounded-md p-1.5 text-slate-400 opacity-0 transition-opacity hover:bg-slate-100 hover:text-indigo-600 group-hover:opacity-100 md:right-4"
+                >
+                    <Pencil size={15} />
+                </button>
+            )}
         </div>
     );
 }
 
 export default OrderRow
+

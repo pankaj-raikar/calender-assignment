@@ -1,5 +1,7 @@
 import { Info } from "lucide-react"
+import { useState } from "react";
 import OrderRow from "./OrderRow"
+import EditOrderModal from "./EditOrderModal";
 import { formatDuration } from "../utils/date";
 import { useOrderStore } from "../store/ordersStore";
 
@@ -25,6 +27,11 @@ const OrderListPanel = () => {
 
     const selectedOrderId = useOrderStore((state) => state.selectedOrderId);
     const setSelectedOrderId = useOrderStore((state) => state.setSelectedOrderId);
+
+    const [editingOrderId, setEditingOrderId] = useState<string | null>(null);
+    const editingOrder = editingOrderId
+        ? orders.find((o) => o.id === editingOrderId) ?? null
+        : null;
 
     return (
         <div className="h-full">
@@ -53,9 +60,17 @@ const OrderListPanel = () => {
                         onClick={() =>
                             setSelectedOrderId(selectedOrderId === order.id ? null : order.id)
                         }
+                        onEdit={() => setEditingOrderId(order.id)}
                     />
                 ))}
             </div>
+
+            {editingOrder && (
+                <EditOrderModal
+                    order={editingOrder}
+                    onClose={() => setEditingOrderId(null)}
+                />
+            )}
         </div>
     )
 }
