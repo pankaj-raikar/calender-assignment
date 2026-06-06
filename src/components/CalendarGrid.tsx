@@ -1,5 +1,6 @@
 import CalendarDayCell from "./CalendarDayCell";
-
+import { sampleOrders } from "../data/orders";
+import { isDateInRange } from "../utils/date";
 const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 const days = [
     { day: 27, isCurrentMonth: false },
@@ -40,6 +41,8 @@ const days = [
     { day: 30 },
 ];
 const CalendarGrid = () => {
+
+
     return (
         <div>
             <div className="grid grid-cols-7 border-b border-slate-200 bg-slate-50">
@@ -51,12 +54,23 @@ const CalendarGrid = () => {
             </div>
 
             <div className="grid grid-cols-7">
-                {days.map((date, index) => (
-                    <CalendarDayCell
-                        key={`${date.day}-${index}`}
-                        day={date.day}
-                        isCurrentMonth={date.isCurrentMonth} />
-                ))}
+                {days.map((date, index) => {
+                    const dateString = date.isCurrentMonth === false
+                        ? `2025-07-${String(date.day).padStart(2, "0")}`
+                        : `2025-08-${String(date.day).padStart(2, "0")}`;
+
+                    const ordersForDay = sampleOrders.filter((order) =>
+                        isDateInRange(dateString, order.startDate, order.endDate)
+                    );
+                    return (
+                        <CalendarDayCell
+                            key={`${date.day}-${index}`}
+                            day={date.day}
+                            isCurrentMonth={date.isCurrentMonth}
+                            orders={ordersForDay}
+                        />
+                    )
+                })}
 
             </div>
         </div>

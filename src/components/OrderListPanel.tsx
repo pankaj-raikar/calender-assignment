@@ -1,22 +1,34 @@
 import { Info } from "lucide-react"
+import OrderRow from "./OrderRow"
+import { sampleOrders } from "../data/orders";
+import { formatDuration } from "../utils/date";
 
 
 const OrderListPanel = () => {
     return (
         <div className="h-full">
-            <div className="grid h-16 grid-cols-[1.4fr_1fr_0.9fr_0.9fr] items-center border-b border-slate-200 px-6 text-lg font-semibold text-slate-950">
+            <div className="grid h-16 grid-cols-4 items-center border-b border-slate-200 px-8 text-lg font-semibold text-slate-950">
                 <div className="flex items-center gap-2">
                     <span>Plan/Order</span>
                     <Info size={18} className="text-slate-500" />
                 </div>
 
-                <div>Status</div>
-                <div>Duration</div>
-                <div className="text-right">Progress</div>
+                <div className="justify-self-center">Status</div>
+                <div className="justify-self-center">Duration</div>
+                <div className="justify-self-center">Progress</div>
             </div>
 
             <div>
-                {/* OrderRow components will go here next */}
+                {sampleOrders.map((order, index) => (
+                    <OrderRow
+                        key={order.id}
+                        index={index + 1}
+                        code={order.colorCode}
+                        status={order.status}
+                        duration={formatDuration(order.startDate, order.endDate)}
+                        progress={order.progress}
+                    />
+                ))}
             </div>
         </div>
     )

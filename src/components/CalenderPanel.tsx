@@ -1,7 +1,6 @@
 import CalendarGrid from "./CalendarGrid"
 import CalendarHeader from "./CalendarHeader"
 import OrderListPanel from "./OrderListPanel"
-import StatusBadge from "./StatusBadge"
 
 
 const CalenderPanel = () => {
@@ -15,9 +14,7 @@ const CalenderPanel = () => {
                     <CalendarGrid />
                 </div>
                 <aside className="border-l border-slate-200">
-                    <div className="p-6">
-                        <OrderListPanel />
-                    </div>
+                    <OrderListPanel />
                 </aside>
             </div>
         </section>
