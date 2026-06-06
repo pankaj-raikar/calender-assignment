@@ -11,7 +11,8 @@ type CalendarDayCellProps = {
 
 function getOrderTagVariant(status: ProductionOrder["status"]) {
     if (status === "Completed") return "completed";
-    if (status === "Planned" || status === "Pending") return "planned";
+    if (status === "Planned") return "planned";
+    if (status === "Pending") return "pending";
     if (status === "Cancelled") return "cancelled";
     if (status === "Approved") return "approved";
 
@@ -61,7 +62,6 @@ const CalendarDayCell = ({
                             draggable
                             onDragStart={(orderId) => setDraggedOrderId(orderId)}
                             orderNumber={order.label}
-
                             colorCode={order.colorCode}
                             variant={getOrderTagVariant(order.status)}
                             tooltip={`${order.label} • ${order.status}`}

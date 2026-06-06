@@ -1,7 +1,7 @@
 type OrderTagProps = {
     orderNumber: string;
     colorCode: string;
-    variant?: "inProgress" | "completed" | "planned" | "cancelled" | "approved";
+    variant?: "inProgress" | "completed" | "planned" | "pending" | "cancelled" | "approved";
     tooltip?: string;
     isFaded?: boolean;
     onMouseEnter?: () => void;
@@ -28,7 +28,8 @@ const OrderTag = ({
     const styles = {
         inProgress: "border-teal-600 bg-teal-600 text-white",
         completed: "border-green-500 bg-green-500 text-white",
-        planned: "border-yellow-400 bg-white text-yellow-500",
+        planned: "border-purple-500 bg-white text-purple-600",
+        pending: "border-yellow-400 bg-white text-yellow-600",
         cancelled: "border-slate-400 bg-slate-100 text-slate-500",
         approved: "border-green-600 bg-green-600 text-white",
     };
@@ -45,7 +46,7 @@ const OrderTag = ({
             <span className="mr-0.5 shrink-0 rounded-sm bg-white/80 px-0.5 text-[9px] font-semibold text-indigo-700 md:mr-1 md:px-1 md:text-sm">
                 {orderNumber}
             </span>
-            <span className="min-w-0 truncate">{colorCode}</span>
+            <span className="overflow-hidden">{colorCode}</span>
         </div>
     );
 };
