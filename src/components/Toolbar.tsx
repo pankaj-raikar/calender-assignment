@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { ChevronDown, ListFilter, Plus } from "lucide-react";
 import FilterPopover from "./FilterPopover";
+import CreateOrderModal from "./CreateOrderModal";
 
 const Toolbar = () => {
     const [isFilterOpen, setIsFilterOpen] = useState(false);
-
+    const [isCreateOpen, setIsCreateOpen] = useState(false);
     return (
 
         <div className="mt-10 flex items-center justify-between">
@@ -21,11 +22,16 @@ const Toolbar = () => {
                 {isFilterOpen && <FilterPopover />}
             </div>
 
-            <button className="flex h-12 items-center gap-3 rounded-md bg-indigo-700 px-6 text-base font-semibold text-white shadow-lg shadow-slate-300">
+            <button onClick={() => setIsCreateOpen(true)} className="flex h-12 items-center gap-3 rounded-md bg-indigo-700 px-6 text-base font-semibold text-white shadow-lg shadow-slate-300">
                 <span>Create Order</span>
                 <Plus size={20} />
             </button>
+            {isCreateOpen && (
+                <CreateOrderModal onClose={() => setIsCreateOpen(false)} />
+            )}
         </div>
+
+
     );
 };
 
