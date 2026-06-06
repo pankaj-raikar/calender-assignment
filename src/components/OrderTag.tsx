@@ -7,6 +7,9 @@ type OrderTagProps = {
     onMouseEnter?: () => void;
     onMouseLeave?: () => void;
     isSelected?: boolean;
+    orderId: string;
+    draggable?: boolean;
+    onDragStart?: (orderId: string) => void;
 };
 
 const OrderTag = ({
@@ -17,7 +20,10 @@ const OrderTag = ({
     isFaded,
     onMouseEnter,
     onMouseLeave,
-    isSelected
+    isSelected,
+    orderId,
+    draggable = false,
+    onDragStart,
 }: OrderTagProps) => {
     const styles = {
         inProgress: "border-teal-600 bg-teal-600 text-white",
@@ -32,6 +38,8 @@ const OrderTag = ({
             title={tooltip}
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}
+            draggable={draggable}
+            onDragStart={() => onDragStart?.(orderId)}
             className={`flex h-9 items-center rounded-md border px-3 text-base font-semibold transition-opacity ${styles[variant]} ${isFaded ? "opacity-30" : "opacity-100"} ${isSelected ? "ring-2 ring-indigo-500 ring-offset-1" : ""}`}
         >
             <span className="mr-1 rounded-sm bg-white/80 px-1 text-sm font-semibold text-indigo-700">

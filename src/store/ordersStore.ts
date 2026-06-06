@@ -4,6 +4,7 @@ import {
   type OrderStatus,
   type ProductionOrder,
 } from "../data/orders";
+import { getDurationInDays, rangesOverlap } from "../utils/date";
 
 const storageKey = "production-calendar-orders";
 
@@ -26,6 +27,12 @@ function formatMonthDate(date: Date) {
   return date.toISOString().slice(0, 7);
 }
 
+function addDays(dateString: string, days: number) {
+  const date = new Date(dateString);
+  date.setDate(date.getDate() + days);
+
+  return date.toISOString().slice(0, 10);
+}
 type OrdersStore = {
   orders: ProductionOrder[];
   selectedStatuses: OrderStatus[];
@@ -42,6 +49,18 @@ type OrdersStore = {
   goToPreviousMonth: () => void;
   goToNextMonth: () => void;
   goToThisMonth: () => void;
+  draggedOrderId: string | null;
+  setDraggedOrderId: (orderId: string | null) => void;
+  moveOrder: (orderId: string, newStartDate: string) => void;
+  dragError: string;
+  clearDragError: () => void;
+  pastOrders: ProductionOrder[][];
+  undo: () => void;
+  searchQuery: string;
+  setSearchQuery: (query: string) => void;
+  toastMessage: string;
+  setToastMessage: (message: string) => void;
+  clearToastMessage: () => void;
 };
 
 export const useOrderStore = create<OrdersStore>((set) => ({
@@ -80,6 +99,8 @@ export const useOrderStore = create<OrdersStore>((set) => ({
 
       return {
         orders: nextOrders,
+        pastOrders: [...state.pastOrders, state.orders],
+        toastMessage: "Order created.",
       };
     }),
   currentMonth: "2025-08",
@@ -103,4 +124,88 @@ export const useOrderStore = create<OrdersStore>((set) => ({
     }),
 
   goToThisMonth: () => set({ currentMonth: formatMonthDate(new Date()) }),
+  draggedOrderId: null,
+  setDraggedOrderId: (orderId) => set({ draggedOrderId: orderId }),
+  moveOrder: (orderId, newStartDate) =>
+    set((state) => {
+      const draggedOrder = state.orders.find((order) => order.id === orderId);
+
+      if (!draggedOrder) {
+        return state;
+      }
+
+      const duration =
+        getDurationInDays(draggedOrder.startDate, draggedOrder.endDate) - 1;
+
+      const newEndDate = addDays(newStartDate, duration);
+
+      const hasCollision = state.orders.some(
+        (order) =>
+          order.id !== orderId &&
+          order.area === draggedOrder.area &&
+          rangesOverlap(
+            newStartDate,
+            newEndDate,
+            order.startDate,
+            order.endDate,
+          ),
+      );
+
+      if (hasCollision) {
+        return {
+          draggedOrderId: null,
+          dragError: "Cannot move order: overlapping order in the same area.",
+        };
+      }
+
+      const nextOrders = state.orders.map((order) => {
+        if (order.id !== orderId) {
+          return order;
+        }
+
+        return {
+          ...order,
+          startDate: newStartDate,
+          endDate: newEndDate,
+        };
+      });
+
+      if (typeof localStorage !== "undefined") {
+        localStorage.setItem(storageKey, JSON.stringify(nextOrders));
+      }
+
+      return {
+        orders: nextOrders,
+        draggedOrderId: null,
+        dragError: "",
+        pastOrders: [...state.pastOrders, state.orders],
+        toastMessage: "Order moved.",
+      };
+    }),
+  dragError: "",
+  clearDragError: () => set({ dragError: "" }),
+  pastOrders: [],
+  undo: () =>
+    set((state) => {
+      const previousOrders = state.pastOrders.at(-1);
+
+      if (!previousOrders) {
+        return state;
+      }
+
+      if (typeof localStorage !== "undefined") {
+        localStorage.setItem(storageKey, JSON.stringify(previousOrders));
+      }
+
+      return {
+        orders: previousOrders,
+        pastOrders: state.pastOrders.slice(0, -1),
+        toastMessage: "Last action undone.",
+      };
+    }),
+  searchQuery: "",
+  setSearchQuery: (query) => set({ searchQuery: query }),
+  toastMessage: "",
+  setToastMessage: (message) => set({ toastMessage: message }),
+  clearToastMessage: () => set({ toastMessage: "" }),
 }));

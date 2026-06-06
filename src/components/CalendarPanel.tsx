@@ -3,13 +3,12 @@ import CalendarHeader from "./CalendarHeader"
 import OrderListPanel from "./OrderListPanel"
 
 
-const CalenderPanel = () => {
+const CalendarPanel = () => {
     return (
         <section aria-label="Production calendar workspace"
             className="mt-14 min-h-[680px] border border-slate-200 bg-white">
             <div className="grid min-h-[680px] grid-cols-[1fr_560px]">
                 <div>
-                    {/* calender will go here*/}
                     <CalendarHeader />
                     <CalendarGrid />
                 </div>
@@ -21,4 +20,4 @@ const CalenderPanel = () => {
     )
 }
 
-export default CalenderPanel
+export default CalendarPanel

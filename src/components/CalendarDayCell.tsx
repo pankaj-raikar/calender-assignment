@@ -6,6 +6,7 @@ type CalendarDayCellProps = {
     day: number;
     isCurrentMonth?: boolean;
     orders?: ProductionOrder[];
+    dateString: string;
 };
 
 function getOrderTagVariant(status: ProductionOrder["status"]) {
@@ -21,14 +22,24 @@ const CalendarDayCell = ({
     day,
     isCurrentMonth = true,
     orders = [],
+    dateString
 }: CalendarDayCellProps) => {
     const hoveredOrderId = useOrderStore((state) => state.hoveredOrderId);
     const setHoveredOrderId = useOrderStore((state) => state.setHoveredOrderId);
     const selectedOrderId = useOrderStore((state) => state.selectedOrderId);
-
+    const setDraggedOrderId = useOrderStore((state) => state.setDraggedOrderId);
+    const draggedOrderId = useOrderStore((state) => state.draggedOrderId);
+    const moveOrder = useOrderStore((state) => state.moveOrder);
 
     return (
-        <div className="min-h-[168px] border-r border-b border-slate-200 p-3">
+        <div data-date={dateString} onDragOver={(event) => event.preventDefault()}
+            onDrop={() => {
+                if (!draggedOrderId) {
+                    return;
+                }
+
+                moveOrder(draggedOrderId, dateString);
+            }} className="min-h-[168px] border-r border-b border-slate-200 p-3">
             <span
                 className={
                     isCurrentMonth
@@ -46,7 +57,11 @@ const CalendarDayCell = ({
                     return (
                         <OrderTag
                             key={order.id}
+                            orderId={order.id}
+                            draggable
+                            onDragStart={(orderId) => setDraggedOrderId(orderId)}
                             orderNumber={order.label}
+
                             colorCode={order.colorCode}
                             variant={getOrderTagVariant(order.status)}
                             tooltip={`${order.label} • ${order.status}`}

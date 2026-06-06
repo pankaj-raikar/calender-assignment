@@ -1,9 +1,27 @@
-import CalenderPanel from "./components/CalenderPanel";
+import CalendarPanel from "./components/CalendarPanel";
 import SearchBox from "./components/SearchBox";
 import TabBar from "./components/TabBar";
 import Toolbar from "./components/Toolbar";
 import "./index.css"
+import { useEffect } from "react";
+import { useOrderStore } from "./store/ordersStore";
+import Toast from "./components/Toast";
 export default function App() {
+  const undo = useOrderStore((state) => state.undo);
+
+  useEffect(() => {
+    function handleKeyDown(event: KeyboardEvent) {
+      const isUndo = (event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "z";
+
+      if (isUndo) {
+        event.preventDefault();
+        undo();
+      }
+    }
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [undo]);
   return (
     <AppShell>
       <header className="flex items-center justify-between">
@@ -15,7 +33,8 @@ export default function App() {
       </header>
       <TabBar />
       <Toolbar />
-      <CalenderPanel />
+      <CalendarPanel />
+      <Toast />
     </AppShell>
   );
 }

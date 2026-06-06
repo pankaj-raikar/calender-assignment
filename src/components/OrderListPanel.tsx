@@ -7,12 +7,25 @@ const OrderListPanel = () => {
 
     const orders = useOrderStore((state) => state.orders);
     const selectedStatuses = useOrderStore((state) => state.selectedStatuses);
-    const visibleOrders = orders.filter((order) =>
-        selectedStatuses.includes(order.status)
-    );
+
+    const searchQuery = useOrderStore((state) => state.searchQuery);
+    const normalizedSearch = searchQuery.trim().toLowerCase();
+    const visibleOrders = orders.filter((order) => {
+        const matchesStatus = selectedStatuses.includes(order.status);
+
+        const matchesSearch =
+            normalizedSearch === "" ||
+            order.label.toLowerCase().includes(normalizedSearch) ||
+            order.colorCode.toLowerCase().includes(normalizedSearch) ||
+            order.area.toLowerCase().includes(normalizedSearch) ||
+            order.assignee.toLowerCase().includes(normalizedSearch);
+
+        return matchesStatus && matchesSearch;
+    });
 
     const selectedOrderId = useOrderStore((state) => state.selectedOrderId);
     const setSelectedOrderId = useOrderStore((state) => state.setSelectedOrderId);
+
     return (
         <div className="h-full">
             <div className="grid h-16 grid-cols-4 items-center border-b border-slate-200 px-8 text-lg font-semibold text-slate-950">
