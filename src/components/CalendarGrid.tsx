@@ -45,6 +45,7 @@ const days = [
 const CalendarGrid = () => {
 
     const orders = useOrderStore((state) => state.orders);
+    const selectedStatuses = useOrderStore((state) => state.selectedStatuses);
     return (
         <div>
             <div className="grid grid-cols-7 border-b border-slate-200 bg-slate-50">
@@ -61,8 +62,10 @@ const CalendarGrid = () => {
                         ? `2025-07-${String(date.day).padStart(2, "0")}`
                         : `2025-08-${String(date.day).padStart(2, "0")}`;
 
-                    const ordersForDay = orders.filter((order) =>
-                        isDateInRange(dateString, order.startDate, order.endDate)
+                    const ordersForDay = orders.filter(
+                        (order) =>
+                            selectedStatuses.includes(order.status) &&
+                            isDateInRange(dateString, order.startDate, order.endDate)
                     );
                     return (
                         <CalendarDayCell

@@ -6,6 +6,10 @@ import { useOrderStore } from "../store/ordersStore";
 const OrderListPanel = () => {
 
     const orders = useOrderStore((state) => state.orders);
+    const selectedStatuses = useOrderStore((state) => state.selectedStatuses);
+    const visibleOrders = orders.filter((order) =>
+        selectedStatuses.includes(order.status)
+    );
     return (
         <div className="h-full">
             <div className="grid h-16 grid-cols-4 items-center border-b border-slate-200 px-8 text-lg font-semibold text-slate-950">
@@ -20,7 +24,7 @@ const OrderListPanel = () => {
             </div>
 
             <div>
-                {orders.map((order, index) => (
+                {visibleOrders.map((order, index) => (
                     <OrderRow
                         key={order.id}
                         index={index + 1}
