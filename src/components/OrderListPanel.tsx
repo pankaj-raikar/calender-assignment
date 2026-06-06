@@ -10,6 +10,9 @@ const OrderListPanel = () => {
     const visibleOrders = orders.filter((order) =>
         selectedStatuses.includes(order.status)
     );
+
+    const selectedOrderId = useOrderStore((state) => state.selectedOrderId);
+    const setSelectedOrderId = useOrderStore((state) => state.setSelectedOrderId);
     return (
         <div className="h-full">
             <div className="grid h-16 grid-cols-4 items-center border-b border-slate-200 px-8 text-lg font-semibold text-slate-950">
@@ -32,6 +35,11 @@ const OrderListPanel = () => {
                         status={order.status}
                         duration={formatDuration(order.startDate, order.endDate)}
                         progress={order.progress}
+                        orderId={order.id}
+                        isSelected={selectedOrderId === order.id}
+                        onClick={() =>
+                            setSelectedOrderId(selectedOrderId === order.id ? null : order.id)
+                        }
                     />
                 ))}
             </div>

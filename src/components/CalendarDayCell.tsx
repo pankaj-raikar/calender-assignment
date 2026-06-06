@@ -4,9 +4,9 @@ import { useOrderStore } from "../store/ordersStore";
 
 type CalendarDayCellProps = {
     day: number;
-    isCurrentMonth?: boolean
+    isCurrentMonth?: boolean;
     orders?: ProductionOrder[];
-}
+};
 
 function getOrderTagVariant(status: ProductionOrder["status"]) {
     if (status === "Completed") return "completed";
@@ -20,10 +20,13 @@ function getOrderTagVariant(status: ProductionOrder["status"]) {
 const CalendarDayCell = ({
     day,
     isCurrentMonth = true,
-    orders = []
+    orders = [],
 }: CalendarDayCellProps) => {
     const hoveredOrderId = useOrderStore((state) => state.hoveredOrderId);
     const setHoveredOrderId = useOrderStore((state) => state.setHoveredOrderId);
+    const selectedOrderId = useOrderStore((state) => state.selectedOrderId);
+
+
     return (
         <div className="min-h-[168px] border-r border-b border-slate-200 p-3">
             <span
@@ -38,7 +41,8 @@ const CalendarDayCell = ({
 
             <div className="mt-2 space-y-1">
                 {orders.map((order) => {
-                    const isFaded = hoveredOrderId !== null && hoveredOrderId !== order.id;
+                    const isFaded =
+                        hoveredOrderId !== null && hoveredOrderId !== order.id;
                     return (
                         <OrderTag
                             key={order.id}
@@ -49,12 +53,13 @@ const CalendarDayCell = ({
                             isFaded={isFaded}
                             onMouseEnter={() => setHoveredOrderId(order.id)}
                             onMouseLeave={() => setHoveredOrderId(null)}
+                            isSelected={selectedOrderId === order.id}
                         />
-                    )
+                    );
                 })}
             </div>
         </div>
     );
-}
+};
 
-export default CalendarDayCell
+export default CalendarDayCell;

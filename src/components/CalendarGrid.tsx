@@ -46,6 +46,10 @@ const CalendarGrid = () => {
 
     const orders = useOrderStore((state) => state.orders);
     const selectedStatuses = useOrderStore((state) => state.selectedStatuses);
+
+    const calendarView = useOrderStore((state) => state.calendarView);
+
+    const visibleDays = calendarView === "Weekly" ? days.slice(5, 12) : days;
     return (
         <div>
             <div className="grid grid-cols-7 border-b border-slate-200 bg-slate-50">
@@ -57,7 +61,7 @@ const CalendarGrid = () => {
             </div>
 
             <div className="grid grid-cols-7">
-                {days.map((date, index) => {
+                {visibleDays.map((date, index) => {
                     const dateString = date.isCurrentMonth === false
                         ? `2025-07-${String(date.day).padStart(2, "0")}`
                         : `2025-08-${String(date.day).padStart(2, "0")}`;

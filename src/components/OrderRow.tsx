@@ -6,6 +6,9 @@ type OrderRowProps = {
     status: "Pending" | "Completed" | "In Progress" | "Planned" | "Cancelled" | "Approved";
     duration: string;
     progress: number;
+    orderId: string;
+    isSelected?: boolean;
+    onClick?: () => void;
 };
 
 
@@ -15,12 +18,16 @@ const OrderRow = ({
     status,
     duration,
     progress,
+    orderId,
+    isSelected,
+    onClick
 }: OrderRowProps) => {
     const ringColor =
         progress === 100 ? "border-green-500" : "border-slate-200";
 
     return (
-        <div className="grid h-16 grid-cols-4 items-center border-b border-slate-100 px-8 text-base">
+        <div onClick={onClick} className={`grid h-16 cursor-pointer grid-cols-4 items-center border-b px-8 text-base ${isSelected ? "border-indigo-300 bg-indigo-50" : "border-slate-100"
+            }`}>
             <div className="flex items-center gap-5">
                 <span className="font-medium text-indigo-700">#{index}</span>
                 <span className="text-slate-950">{code}</span>
