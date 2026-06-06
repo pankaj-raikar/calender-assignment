@@ -6,13 +6,13 @@ import OrderListPanel from "./OrderListPanel"
 const CalendarPanel = () => {
     return (
         <section aria-label="Production calendar workspace"
-            className="mt-14 min-h-[680px] border border-slate-200 bg-white">
-            <div className="grid min-h-[680px] grid-cols-[1fr_560px]">
-                <div>
+            className="mt-6 min-h-[680px] bg-white md:mt-14 md:border md:border-slate-200">
+            <div className="grid min-h-[680px] grid-cols-1 md:grid-cols-[1fr_560px]">
+                <div className="min-w-0">
                     <CalendarHeader />
                     <CalendarGrid />
                 </div>
-                <aside className="border-l border-slate-200">
+                <aside className="min-w-0 bg-slate-50 md:border-l md:border-slate-200 md:bg-white">
                     <OrderListPanel />
                 </aside>
             </div>

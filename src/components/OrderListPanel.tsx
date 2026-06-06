@@ -28,7 +28,7 @@ const OrderListPanel = () => {
 
     return (
         <div className="h-full">
-            <div className="grid h-16 grid-cols-4 items-center border-b border-slate-200 px-8 text-lg font-semibold text-slate-950">
+            <div className="hidden h-16 grid-cols-4 items-center border-b border-slate-200 px-8 text-lg font-semibold text-slate-950 md:grid">
                 <div className="flex items-center gap-2">
                     <span>Plan/Order</span>
                     <Info size={18} className="text-slate-500" />
@@ -36,10 +36,10 @@ const OrderListPanel = () => {
 
                 <div className="justify-self-center">Status</div>
                 <div className="justify-self-center">Duration</div>
-                <div className="justify-self-center">Progress</div>
+                <div className="w-[112px] justify-self-center text-center">Progress</div>
             </div>
 
-            <div>
+            <div className="space-y-2 px-3 py-3 md:space-y-0 md:px-0 md:py-0">
                 {visibleOrders.map((order, index) => (
                     <OrderRow
                         key={order.id}

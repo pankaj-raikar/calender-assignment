@@ -15,9 +15,9 @@ function CalendarHeader() {
         year: "numeric",
     });
     return (
-        <div className='flex h-24 items-center justify-between border-b border-slate-200 px-6'>
-            <div className="grid grid-cols-[200px_90px] items-center">
-                <h2 className="text-2xl font-semibold text-slate-950">
+        <div className='flex h-16 items-center justify-between border-b border-slate-200 px-0 md:h-24 md:px-6'>
+            <div className="flex w-full items-center justify-between px-0 md:grid md:w-auto md:grid-cols-[200px_90px] md:px-0">
+                <h2 className="text-2xl font-semibold text-slate-950 md:text-2xl">
                     {monthLabel}
                 </h2>
 
@@ -32,7 +32,7 @@ function CalendarHeader() {
                 </div>
             </div>
 
-            <div className='flex items-center gap-4'>
+            <div className='hidden items-center gap-4 md:flex'>
                 <div className="relative">
                     <select
                         value={calendarView}

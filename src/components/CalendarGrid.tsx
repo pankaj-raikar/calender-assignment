@@ -42,7 +42,7 @@ const CalendarGrid = () => {
             )}
             <div className="grid grid-cols-7 border-b border-slate-200 bg-slate-50">
                 {weekdays.map((day) => (
-                    <div key={day} className="border-r border-slate-200 py-5 text-center text-lg text-slate-600 last:border-r-0">
+                    <div key={day} className="border-r border-slate-200 py-2 text-center text-sm text-slate-600 last:border-r-0 md:py-5 md:text-lg">
                         {day}
                     </div>
                 ))}

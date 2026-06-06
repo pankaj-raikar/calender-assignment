@@ -24,9 +24,8 @@ export default function App() {
   }, [undo]);
   return (
     <AppShell>
-      <header className="flex items-center justify-between">
-        <h1 className="text-3xl font-normal tracking-normal text-slate-800
-        ">
+      <header className="flex items-center justify-between gap-4">
+        <h1 className="text-3xl font-semibold tracking-normal text-slate-950 md:font-normal md:text-slate-800">
           Production
         </h1>
         <SearchBox />
@@ -43,7 +42,7 @@ function AppShell({ children }: { children: React.ReactNode }) {
   return (
     <main
       aria-label="Production calendar"
-      className="min-h-screen bg-slate-100 px-8 py-7 text-slate-950"
+      className="min-h-screen overflow-x-hidden bg-slate-100 px-4 py-6 text-slate-950 md:px-8 md:py-7"
     >
       {children}
     </main>

@@ -40,12 +40,12 @@ const OrderTag = ({
             onMouseLeave={onMouseLeave}
             draggable={draggable}
             onDragStart={() => onDragStart?.(orderId)}
-            className={`flex h-9 items-center rounded-md border px-3 text-base font-semibold transition-opacity ${styles[variant]} ${isFaded ? "opacity-30" : "opacity-100"} ${isSelected ? "ring-2 ring-indigo-500 ring-offset-1" : ""}`}
+            className={`flex h-5 w-full min-w-0 items-center overflow-hidden rounded border px-1 text-[9px] font-semibold leading-none transition-opacity md:h-9 md:rounded-md md:px-3 md:text-base ${styles[variant]} ${isFaded ? "opacity-30" : "opacity-100"} ${isSelected ? "ring-2 ring-indigo-500 ring-offset-1" : ""}`}
         >
-            <span className="mr-1 rounded-sm bg-white/80 px-1 text-sm font-semibold text-indigo-700">
+            <span className="mr-0.5 shrink-0 rounded-sm bg-white/80 px-0.5 text-[9px] font-semibold text-indigo-700 md:mr-1 md:px-1 md:text-sm">
                 {orderNumber}
             </span>
-            <span>{colorCode}</span>
+            <span className="min-w-0 truncate">{colorCode}</span>
         </div>
     );
 };

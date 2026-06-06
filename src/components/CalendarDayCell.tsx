@@ -39,18 +39,18 @@ const CalendarDayCell = ({
                 }
 
                 moveOrder(draggedOrderId, dateString);
-            }} className="min-h-[168px] border-r border-b border-slate-200 p-3">
+            }} className="min-h-[92px] min-w-0 border-r border-b border-slate-200 p-1.5 md:min-h-[168px] md:p-3">
             <span
                 className={
                     isCurrentMonth
-                        ? "text-lg font-medium text-slate-950"
-                        : "text-lg font-medium text-slate-400"
+                        ? "text-sm font-medium text-slate-950 md:text-lg"
+                        : "text-sm font-medium text-slate-400 md:text-lg"
                 }
             >
                 {day}
             </span>
 
-            <div className="mt-2 space-y-1">
+            <div className="mt-2 min-w-0 space-y-1">
                 {orders.map((order) => {
                     const isFaded =
                         hoveredOrderId !== null && hoveredOrderId !== order.id;
