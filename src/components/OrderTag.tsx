@@ -2,15 +2,20 @@ type OrderTagProps = {
     orderNumber: string;
     colorCode: string;
     variant?: "inProgress" | "completed" | "planned" | "cancelled" | "approved";
+    tooltip?: string;
+    isFaded?: boolean;
+    onMouseEnter?: () => void;
+    onMouseLeave?: () => void;
 };
-
-
-
 
 const OrderTag = ({
     orderNumber,
     colorCode,
     variant = "inProgress",
+    tooltip,
+    isFaded,
+    onMouseEnter,
+    onMouseLeave,
 }: OrderTagProps) => {
     const styles = {
         inProgress: "border-teal-600 bg-teal-600 text-white",
@@ -20,10 +25,12 @@ const OrderTag = ({
         approved: "border-green-600 bg-green-600 text-white",
     };
 
-
     return (
         <div
-            className={`flex h-9 items-center rounded-md border px-3 text-base font-semibold ${styles[variant]}`}
+            title={tooltip}
+            onMouseEnter={onMouseEnter}
+            onMouseLeave={onMouseLeave}
+            className={`flex h-9 items-center rounded-md border px-3 text-base font-semibold transition-opacity ${styles[variant]} ${isFaded ? "opacity-30" : "opacity-100"}`}
         >
             <span className="mr-1 rounded-sm bg-white/80 px-1 text-sm font-semibold text-indigo-700">
                 {orderNumber}
@@ -31,6 +38,6 @@ const OrderTag = ({
             <span>{colorCode}</span>
         </div>
     );
-}
+};
 
-export default OrderTag
+export default OrderTag;

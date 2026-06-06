@@ -1,5 +1,6 @@
 import OrderTag from "./OrderTag";
 import type { ProductionOrder } from "../data/orders";
+import { useOrderStore } from "../store/ordersStore";
 
 type CalendarDayCellProps = {
     day: number;
@@ -21,6 +22,8 @@ const CalendarDayCell = ({
     isCurrentMonth = true,
     orders = []
 }: CalendarDayCellProps) => {
+    const hoveredOrderId = useOrderStore((state) => state.hoveredOrderId);
+    const setHoveredOrderId = useOrderStore((state) => state.setHoveredOrderId);
     return (
         <div className="min-h-[168px] border-r border-b border-slate-200 p-3">
             <span
@@ -34,14 +37,21 @@ const CalendarDayCell = ({
             </span>
 
             <div className="mt-2 space-y-1">
-                {orders.map((order) => (
-                    <OrderTag
-                        key={order.id}
-                        orderNumber={order.label}
-                        colorCode={order.colorCode}
-                        variant={getOrderTagVariant(order.status)}
-                    />
-                ))}
+                {orders.map((order) => {
+                    const isFaded = hoveredOrderId !== null && hoveredOrderId !== order.id;
+                    return (
+                        <OrderTag
+                            key={order.id}
+                            orderNumber={order.label}
+                            colorCode={order.colorCode}
+                            variant={getOrderTagVariant(order.status)}
+                            tooltip={`${order.label} • ${order.status}`}
+                            isFaded={isFaded}
+                            onMouseEnter={() => setHoveredOrderId(order.id)}
+                            onMouseLeave={() => setHoveredOrderId(null)}
+                        />
+                    )
+                })}
             </div>
         </div>
     );

@@ -4,6 +4,8 @@ type OrdersStore = {
     orders: ProductionOrder[];
     selectedStatuses: OrderStatus[];
     toggleStatus: (status: OrderStatus) => void;
+    hoveredOrderId: string | null;
+    setHoveredOrderId: (orderId: string | null) => void;
 };
 
 export const useOrderStore = create<OrdersStore>((set) => ({
@@ -26,4 +28,6 @@ export const useOrderStore = create<OrdersStore>((set) => ({
                     : [...state.selectedStatuses, status],
             };
         }),
+    hoveredOrderId: null,
+    setHoveredOrderId: (orderId) => set({ hoveredOrderId: orderId }),
 }));
